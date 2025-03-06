@@ -1,9 +1,14 @@
 use std::collections::HashMap;
 
-use anagramCheck::{WordGrouping, Word_Grouping_Trait};
+mod dsa;
+mod util;
+use crate::dsa::anagramCheck::{WordGrouping, Word_Grouping_Trait};
+use crate::dsa::popularityCheck;
+use crate::dsa::stack_max::StockStack;
+use util::utils::utils as Utils;
+use util::utils::UtilTraits;
 
-mod anagramCheck;
-mod popularityCheck;
+// ...
 
 fn anagram_main() -> () {
     let mut word_grouping = WordGrouping::new();
@@ -45,7 +50,28 @@ fn popularity_main() -> () {
         }
     }
 }
+
+fn stock_main() -> () {
+    let mut stock = StockStack::new();
+    for i in 1..11 {
+        println!("Week: {}", i);
+        let min = Utils::generate_random_numbers(None, Some(i));
+        let max = Utils::generate_random_numbers(Some(i + 1), None);
+        stock.push(Utils::generate_random_numbers(Some(min), Some(max)));
+    }
+    stock.print_stack();
+
+    for _ in 0..3 {
+        stock.pop();
+    }
+    stock.print_stack();
+    for i in 1..10 {
+        let tup = stock.get_max_for_week(Some(i)).unwrap();
+        println!("Max for week {} is {}", tup.0, tup.1);
+    }
+}
 fn main() {
+    stock_main();
     //anagram_main()
-    popularity_main();
+    // popularity_main();
 }
