@@ -5,6 +5,7 @@ mod util;
 use crate::dsa::anagramCheck::{WordGrouping, Word_Grouping_Trait};
 use crate::dsa::popularityCheck;
 use crate::dsa::stack_max::StockStack;
+use crate::dsa::overlappingTime::overlapping_time::{Meeting, Scheduler};
 use util::utils::utils as Utils;
 use util::utils::UtilTraits;
 
@@ -70,8 +71,47 @@ fn stock_main() -> () {
         println!("Max for week {} is {}", tup.0, tup.1);
     }
 }
+
+fn overlaping_main()->(){
+        let mut scheduler = Scheduler::new();
+    
+        let meetings:Vec<(&str, Meeting)> = vec![
+            ("Alice", Meeting::new(10, 20).unwrap()),
+            ("Alice", Meeting::new(15, 25).unwrap()),
+            ("Alice", Meeting::new(1, 2).unwrap()),
+            ("Bob", Meeting::new(20, 30).unwrap()),
+            ("Bob", Meeting::new(25, 35).unwrap()),
+            ("Zeus", Meeting::new(5, 7).unwrap()),
+            ("Zeus", Meeting::new(100, 101).unwrap()),
+            // ("Kratos", Meeting::new(50, 60).unwrap()),
+        ];
+        let mut names: Vec<&str> = Vec::new();
+    
+        for (name, meeting) in &meetings {
+            scheduler.add_meeting(name.to_string(), *meeting);
+            names.push(name);
+        }
+       
+
+        // let names: Vec<&&str> = meetings.into_iter().map(|meeting| &meeting.0).collect::<Vec<_>>();    
+        for name in names {
+            scheduler.show_meetings(name.to_string());
+        }
+    
+        let pairs = vec![("Alice", "Bob"), ("Zeus", "Kratos")];
+    
+        for (name1, name2) in pairs {
+            match scheduler.get_overlaps(name1.to_string(), name2.to_string()) {
+                Some(overlaps) => println!("Overlapping meetings between {} and {}: {:#?}", name1, name2, overlaps),
+                None => println!("No overlapping meetings between {} and {}", name1, name2),
+            }
+        }
+     
+}
 fn main() {
-    stock_main();
+    overlaping_main();
+    //stock_main();
     //anagram_main()
     // popularity_main();
+
 }
