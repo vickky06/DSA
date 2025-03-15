@@ -13,7 +13,7 @@ impl UtilTraits for utils{
         let min = min.unwrap_or(0);
         let max = max.unwrap_or(100);
         let mut rng = rand::thread_rng();
-        println!("min: {} || max :{}", min, max);
+        // println!("min: {} || max :{}", min, max);
         rng.gen_range(min..=max)
     }
 }
