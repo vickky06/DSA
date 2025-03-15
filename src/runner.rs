@@ -1,13 +1,16 @@
 use std::collections::HashMap;
 
+use crate::util;
+use crate::util::utils::utils as Utils;
+use crate::util::utils::UtilTraits;
+
 use crate::dsa::anagramCheck::{WordGrouping, Word_Grouping_Trait};
 use crate::dsa::popularityCheck;
 use crate::dsa::stack_max::StockStack;
 use crate::dsa::overlappingTime::overlapping_time::{Meeting, Scheduler};
 use crate::dsa::specialShoppingCart::*;
 use crate::dsa::specialShoppingCart::ComboOffers;
-use crate::util::utils::utils as Utils;
-use crate::util::utils::UtilTraits;
+use crate::dsa::binarySearchTree::BinarySearchTree;
 
 pub fn anagram_main() {
     let mut word_grouping = WordGrouping::new();
@@ -168,4 +171,28 @@ pub fn shopping_cart_main()->(){
         }
         None => println!("No valid offers created."),
     }
+}
+
+
+pub fn bst_main(){
+    let mut product_prices:Vec<i32> = Vec::new();
+    for i in 0..=10{
+        product_prices.push(Utils::generate_random_numbers(Some(i), Some(i+100)));
+    }
+    let max : &i32 = product_prices.iter().max().unwrap();
+    let min: &i32 = product_prices.iter().min().unwrap();
+
+    let mut bst = BinarySearchTree::new(product_prices[0]);
+    for i in 1..product_prices.len() { 
+        bst.insert(product_prices[i]);
+        print!("{} ",product_prices[i]);
+
+    }
+    println!("");
+    for i in 0..1{
+        let min_t = Utils::generate_random_numbers(Some(min+0),Some(max-1));
+        let max_t = Utils::generate_random_numbers(Some(min_t+1),Some(max+0));
+        println!("Products in the range: min: {} max: {} are: {:?}",min_t,max_t, bst.productsInRange(min_t, max_t));
+    }
+    
 }
