@@ -2,15 +2,17 @@ use std::collections::HashMap;
 
 use crate::util;
 use crate::util::utils::utils as Utils;
+use crate::util::utils::NameGenerator;
 use crate::util::utils::UtilTraits;
 
 use crate::dsa::anagramCheck::{WordGrouping, Word_Grouping_Trait};
-use crate::dsa::popularityCheck;
-use crate::dsa::stack_max::StockStack;
-use crate::dsa::overlappingTime::overlapping_time::{Meeting, Scheduler};
-use crate::dsa::specialShoppingCart::*;
-use crate::dsa::specialShoppingCart::ComboOffers;
 use crate::dsa::binarySearchTree::BinarySearchTree;
+use crate::dsa::itemRankMerging::ItemObjectsLinkedList;
+use crate::dsa::overlappingTime::overlapping_time::{Meeting, Scheduler};
+use crate::dsa::popularityCheck;
+use crate::dsa::specialShoppingCart::ComboOffers;
+use crate::dsa::specialShoppingCart::*;
+use crate::dsa::stack_max::StockStack;
 
 pub fn anagram_main() {
     let mut word_grouping = WordGrouping::new();
@@ -102,13 +104,16 @@ pub fn overlaping_main() {
 
     for (name1, name2) in pairs {
         match scheduler.get_overlaps(name1.to_string(), name2.to_string()) {
-            Some(overlaps) => println!("Overlapping meetings between {} and {}: {:#?}", name1, name2, overlaps),
+            Some(overlaps) => println!(
+                "Overlapping meetings between {} and {}: {:#?}",
+                name1, name2, overlaps
+            ),
             None => println!("No overlapping meetings between {} and {}", name1, name2),
         }
     }
 }
 
-pub fn shopping_cart_main()->(){
+pub fn shopping_cart_main() -> () {
     let mut item_prices = ItemPrices::new();
 
     // Create items
@@ -128,11 +133,17 @@ pub fn shopping_cart_main()->(){
 
     // Retrieve items
     println!("Fetching Apple: {:?}", item_prices.get_item("Apple"));
-    println!("Fetching Orange (not added): {:?}", item_prices.get_item("Orange"));
+    println!(
+        "Fetching Orange (not added): {:?}",
+        item_prices.get_item("Orange")
+    );
 
     // Remove an item
     item_prices.remove_item("Banana");
-    println!("Fetching Banana after removal: {:?}", item_prices.get_item("Banana"));
+    println!(
+        "Fetching Banana after removal: {:?}",
+        item_prices.get_item("Banana")
+    );
 
     // Try removing a non-existent item
     item_prices.remove_item("Grapes"); // Should print "Item does not exist"
@@ -143,16 +154,14 @@ pub fn shopping_cart_main()->(){
 
     // Try updating price of a non-existent item
     item_prices.update_price("Grapes", 20); // Should print "Item does not exist"
-    
+
     item_prices.add_item(item2.clone());
     item_prices.add_item(item3.clone());
     item_prices.update_price("Apple", 5);
 
-
-
     // Initialize combo offers
     let mut combo_offers = ComboOffers::new();
-    combo_offers.set_combo_price(20,&item_prices); // Set combo price
+    combo_offers.set_combo_price(20, &item_prices); // Set combo price
 
     // Generate offers
     let offers = combo_offers.generate_offers();
@@ -173,26 +182,84 @@ pub fn shopping_cart_main()->(){
     }
 }
 
-
-pub fn bst_main(){
-    let mut product_prices:Vec<i32> = Vec::new();
-    for i in 0..=10{
-        product_prices.push(Utils::generate_random_numbers(Some(i), Some(i+100)));
+pub fn bst_main() {
+    let mut product_prices: Vec<i32> = Vec::new();
+    for i in 0..=10 {
+        product_prices.push(Utils::generate_random_numbers(Some(i), Some(i + 100)));
     }
-    let max : &i32 = product_prices.iter().max().unwrap();
+    let max: &i32 = product_prices.iter().max().unwrap();
     let min: &i32 = product_prices.iter().min().unwrap();
 
     let mut bst = BinarySearchTree::new(product_prices[0]);
-    for i in 1..product_prices.len() { 
+    for i in 1..product_prices.len() {
         bst.insert(product_prices[i]);
-        print!("{} ",product_prices[i]);
-
+        print!("{} ", product_prices[i]);
     }
     println!("");
-    for i in 0..1{
-        let min_t = Utils::generate_random_numbers(Some(min+0),Some(max-1));
-        let max_t = Utils::generate_random_numbers(Some(min_t+1),Some(max+0));
-        println!("Products in the range: min: {} max: {} are: {:?}",min_t,max_t, bst.productsInRange(min_t, max_t));
+    for i in 0..1 {
+        let min_t = Utils::generate_random_numbers(Some(min + 0), Some(max - 1));
+        let max_t = Utils::generate_random_numbers(Some(min_t + 1), Some(max + 0));
+        println!(
+            "Products in the range: min: {} max: {} are: {:?}",
+            min_t,
+            max_t,
+            bst.productsInRange(min_t, max_t)
+        );
     }
+}
+
+pub fn item_rank_main() {
+    const SORTED_LIST: &str = "sorted_list";
+    let mut item_rank: ItemObjectsLinkedList<i32> = ItemObjectsLinkedList::new();
+    let mut generator = NameGenerator::new();
+    let mut prod_list: Vec<String> = Vec::new();
     
+     
+    
+    // Add a random number of products, each with a random number of prices.
+    // The prices are in decreasing order, so the most recent price is added to the front of the list.
+    // This is done to maintain the increasing order of the list, as the data structure is a min-heap or a sorted list.
+    for _ in 0..3 {
+        println!();
+        if let Some(name) = generator.next_name() {
+            // Generate a random number of prices for the product
+            let range = Utils::generate_random_numbers(Some(3), Some(11));
+            // Generate the initial price
+            let mut last_price = Utils::generate_random_numbers(Some(90), Some(100));
+            // Add the prices to the list in decreasing order
+            for i in 0..range {
+                item_rank.upsert_item(&name, last_price);
+                // Generate the next price, which is smaller than the previous one
+                last_price =
+                    Utils::generate_random_numbers(Some(last_price - 11), Some(last_price -1));
+            }
+            // Add the product name to the list of products
+            prod_list.push(name.clone());
+        } else {
+            println!("No more unique names available.");
+        }
+    }
+
+    println!("Printing keys");
+    for name in prod_list {
+        item_rank.print_list(name.as_str());
+    }
+
+    item_rank.add_linked_list(SORTED_LIST);
+    let mut values:Vec<(i32, String)> = Vec::new();
+    
+    // invalid logics : infinite loop
+    // while true{
+    //     println!("*********");
+    //     let values:Vec<(i32,String)> = item_rank.get_heads();
+    //     if values.len() == 0 {
+    //         break;
+    //     }
+    //     let (min_item,min_value) = values.iter().min().unwrap();
+    //     item_rank.upsert_item(SORTED_LIST, *min_item);
+    //     item_rank.remove_item(&min_value);
+    // }
+
+    item_rank.print_list(SORTED_LIST);
+   
 }
