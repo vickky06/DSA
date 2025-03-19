@@ -210,7 +210,7 @@ pub fn bst_main() {
 
 pub fn item_rank_main() {
     const SORTED_LIST: &str = "sorted_list";
-    let mut item_rank: ItemObjectsLinkedList<i32> = ItemObjectsLinkedList::new();
+    let mut item_rank: ItemObjectsLinkedList<i32> = ItemObjectsLinkedList::new(SORTED_LIST.to_string());
     let mut generator = NameGenerator::new();
     let mut prod_list: Vec<String> = Vec::new();
     
@@ -240,25 +240,28 @@ pub fn item_rank_main() {
         }
     }
 
-    println!("Printing keys");
-    for name in prod_list {
-        item_rank.print_list(name.as_str());
-    }
+    // println!("Printing keys");
+    // // for name in prod_list {
+    //     item_rank.print_list(prod_list[0].as_str());
+    //     item_rank.remove_item(prod_list[0].as_str());
+    //     item_rank.print_list(prod_list[0].as_str());
+
+    // // }
 
     item_rank.add_linked_list(SORTED_LIST);
     let mut values:Vec<(i32, String)> = Vec::new();
-    
-    // invalid logics : infinite loop
-    // while true{
-    //     println!("*********");
-    //     let values:Vec<(i32,String)> = item_rank.get_heads();
-    //     if values.len() == 0 {
-    //         break;
-    //     }
-    //     let (min_item,min_value) = values.iter().min().unwrap();
-    //     item_rank.upsert_item(SORTED_LIST, *min_item);
-    //     item_rank.remove_item(&min_value);
-    // }
+    // let mut i = 0;
+    while true{
+        // println!("*********");
+        let values:Vec<(i32,String)> = item_rank.get_heads();
+        if values.len() == 0 {
+            break;
+        }
+        let (min_item,min_value_item) = values.iter().min().unwrap();
+        item_rank.upsert_item(SORTED_LIST, min_item+0);
+        // item_rank.print_list(SORTED_LIST);
+        item_rank.remove_item(&min_value_item);
+    }
 
     item_rank.print_list(SORTED_LIST);
    
