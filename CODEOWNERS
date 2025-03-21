@@ -1,4 +1,8 @@
-vivek.singh.6967@gmail.com
-src/ : vivek.singh.6967@gmail.com
-tests/ : vivek.singh.6967@gmail.com
-src/main.rs : vivek.singh.6967@gmail.com
+# Own the src directory
+/src/ @vickky06
+
+# Own the tests directory
+/tests/ @vickky06
+
+# Own the main.rs file
+/src/main.rs @vickky06
