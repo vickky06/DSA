@@ -5,3 +5,5 @@ pub mod overlappingTime;
 pub mod specialShoppingCart;
 pub mod binarySearchTree;
 pub mod itemRankMerging;
+pub mod mostRecentlyPurchased;
+pub mod DoublyLinkedList;

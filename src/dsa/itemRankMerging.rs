@@ -53,7 +53,7 @@ impl<T: std::fmt::Debug> LinkedList<T> {
 
     fn printing(&self) {
         let mut list_traversal = &self.head;
-        while true {
+        loop {
             match list_traversal {
                 Some(Node) => {
                     print!("{:?}<--", Node.element);

@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
-use crate::util;
+use crate::dsa::mostRecentlyPurchased::Direction;
+use crate::dsa::mostRecentlyPurchased::Item_Map;
 use crate::util::utils::utils as Utils;
 use crate::util::utils::NameGenerator;
 use crate::util::utils::UtilTraits;
@@ -249,9 +250,9 @@ pub fn item_rank_main() {
     // // }
 
     item_rank.add_linked_list(SORTED_LIST);
-    let mut values:Vec<(i32, String)> = Vec::new();
+    let values:Vec<(i32, String)> = Vec::new();
     // let mut i = 0;
-    while true{
+    loop{
         // println!("*********");
         let values:Vec<(i32,String)> = item_rank.get_heads();
         if values.len() == 0 {
@@ -265,4 +266,18 @@ pub fn item_rank_main() {
 
     item_rank.print_list(SORTED_LIST);
    
+}
+
+
+pub fn most_recently_purchased(){
+    
+    let mut tracker = Item_Map::new(2);
+    tracker.purchased(10);
+    tracker.purchased(20);
+    tracker.print_list(Direction::Forward); // 10 20
+    tracker.purchased(10);
+    tracker.print_list(Direction::Forward); // 20 10
+    tracker.purchased(30);
+    tracker.print_list(Direction::Forward); // 10 30
+    
 }
